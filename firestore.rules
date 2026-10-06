@@ -1,0 +1,96 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isValidMember(data) {
+      return data.id is string &&
+             data.userId is string &&
+             data.name is string && data.name.size() > 0 &&
+             data.company is string &&
+             data.industry is string &&
+             (data.role == "MEMBER" || data.role == "ADMIN") &&
+             data.email is string &&
+             data.phone is string;
+    }
+
+    function isValidReferral(data) {
+      return data.id is string &&
+             data.title is string && data.title.size() > 0 &&
+             data.giverMemberId is string &&
+             data.takerMemberId is string &&
+             data.clientName is string &&
+             data.clientPhone is string &&
+             (data.urgency == "HOT" || data.urgency == "WARM" || data.urgency == "COLD") &&
+             (data.status == "RECEIVED" || data.status == "CONTACTED" || data.status == "QUOTED" || data.status == "CLOSED_SUCCESS" || data.status == "CLOSED_FAILED");
+    }
+
+    function isValidChapterGoal(data) {
+      return data.id is string &&
+             (data.period == "WEEK" || data.period == "MONTH" || data.period == "YEAR") &&
+             data.periodLabel is string &&
+             data.targetTyfcbRevenue is number &&
+             data.currentTyfcbRevenue is number &&
+             data.targetReferrals is int &&
+             data.currentReferrals is int &&
+             data.targetMeetings121 is int &&
+             data.currentMeetings121 is int;
+    }
+
+    function isValidKpiReport(data) {
+      return data.id is string &&
+             data.memberId is string &&
+             data.memberName is string &&
+             (data.period == "WEEK" || data.period == "MONTH" || data.period == "YEAR") &&
+             data.referralsGiven is int &&
+             data.meetings121Count is int &&
+             data.tyfcbRevenue is number;
+    }
+
+    function isValidMeeting121(data) {
+      return data.id is string &&
+             data.hostMemberId is string &&
+             data.guestMemberId is string &&
+             data.location is string &&
+             data.isCompleted is bool;
+    }
+
+    // Members collection
+    match /members/{memberId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidMember(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    // Referrals collection
+    match /referrals/{referralId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidReferral(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    // Chapter Goals collection
+    match /chapter_goals/{goalId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidChapterGoal(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    // KPI Reports collection
+    match /kpi_reports/{reportId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidKpiReport(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    // 1-2-1 Meetings collection
+    match /meetings121/{meetingId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidMeeting121(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Power Team TOPPRO",
+  "description": "Cross-industry BNI-style referral and chapter management app with OCR card scanning, KPI tracking, and commissions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

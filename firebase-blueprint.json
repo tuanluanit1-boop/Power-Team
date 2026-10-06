@@ -1,0 +1,139 @@
+{
+  "entities": {
+    "Member": {
+      "title": "Member",
+      "description": "Power Team TOPPRO chapter member profile with networking stats",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique member identifier" },
+        "userId": { "type": "string", "description": "Firebase Auth UID of the member" },
+        "name": { "type": "string", "description": "Full name of member" },
+        "company": { "type": "string", "description": "Company name" },
+        "industry": { "type": "string", "description": "Industry or profession" },
+        "role": { "type": "string", "enum": ["MEMBER", "ADMIN"], "description": "User chapter role" },
+        "email": { "type": "string", "description": "Work email address" },
+        "phone": { "type": "string", "description": "Phone number" },
+        "avatarInitials": { "type": "string", "description": "Initials for avatar placeholder" },
+        "avatarColorHex": { "type": "integer", "description": "Color hex for avatar background" },
+        "tyfcbContributed": { "type": "number", "description": "Total TYFCB revenue generated for others in VNĐ" },
+        "tyfcbReceived": { "type": "number", "description": "Total TYFCB closed business received in VNĐ" },
+        "penaltiesUnpaid": { "type": "number", "description": "Unpaid chapter penalty amount in VNĐ" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp via serverTimestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp via serverTimestamp" }
+      },
+      "required": ["id", "userId", "name", "company", "industry", "role", "email", "phone"]
+    },
+    "Referral": {
+      "title": "Referral",
+      "description": "Cross-industry BNI-style business opportunity referral between members",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique referral identifier" },
+        "title": { "type": "string", "description": "Referral summary title" },
+        "giverMemberId": { "type": "string", "description": "Member ID of the giver" },
+        "takerMemberId": { "type": "string", "description": "Member ID of the recipient taker" },
+        "clientName": { "type": "string", "description": "Name of the prospect client" },
+        "clientPhone": { "type": "string", "description": "Phone number of client" },
+        "clientEmail": { "type": "string", "description": "Email address of client" },
+        "urgency": { "type": "string", "enum": ["HOT", "WARM", "COLD"], "description": "Deal urgency level" },
+        "status": { "type": "string", "enum": ["RECEIVED", "CONTACTED", "QUOTED", "CLOSED_SUCCESS", "CLOSED_FAILED"], "description": "Deal pipeline stage" },
+        "contractType": { "type": "string", "description": "Type of project or contract" },
+        "estimatedBudget": { "type": "number", "description": "Estimated deal value in VNĐ" },
+        "scaleAreaM2": { "type": "string", "description": "Area scale or size" },
+        "projectLocation": { "type": "string", "description": "Project location" },
+        "notes": { "type": "string", "description": "Additional notes" },
+        "tyfcbAmount": { "type": "number", "description": "Closed revenue in VNĐ when won" },
+        "commissionPercent": { "type": "number", "description": "Agreed thank you percentage" },
+        "commonFundPercent": { "type": "number", "description": "Chapter common fund contribution percentage" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["id", "title", "giverMemberId", "takerMemberId", "clientName", "clientPhone", "urgency", "status"]
+    },
+    "ChapterGoal": {
+      "title": "ChapterGoal",
+      "description": "Chapter KPI goals and real-time achievement progress",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Goal period identifier" },
+        "period": { "type": "string", "enum": ["WEEK", "MONTH", "YEAR"], "description": "Goal tracking period" },
+        "periodLabel": { "type": "string", "description": "Formatted period label" },
+        "targetTyfcbRevenue": { "type": "number", "description": "Target closed revenue in VNĐ" },
+        "currentTyfcbRevenue": { "type": "number", "description": "Achieved closed revenue in VNĐ" },
+        "targetReferrals": { "type": "integer", "description": "Target referrals count" },
+        "currentReferrals": { "type": "integer", "description": "Current referrals count" },
+        "targetMeetings121": { "type": "integer", "description": "Target 1-2-1 meetings count" },
+        "currentMeetings121": { "type": "integer", "description": "Current 1-2-1 meetings count" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last metric calculation timestamp" }
+      },
+      "required": ["id", "period", "periodLabel", "targetTyfcbRevenue", "currentTyfcbRevenue", "targetReferrals", "currentReferrals", "targetMeetings121", "currentMeetings121"]
+    },
+    "KpiReport": {
+      "title": "KpiReport",
+      "description": "Individual member performance report for weekly/monthly/yearly leader evaluation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Report identifier" },
+        "memberId": { "type": "string", "description": "Member ID" },
+        "memberName": { "type": "string", "description": "Member name" },
+        "company": { "type": "string", "description": "Company name" },
+        "industry": { "type": "string", "description": "Industry category" },
+        "period": { "type": "string", "enum": ["WEEK", "MONTH", "YEAR"], "description": "Report period" },
+        "referralsGiven": { "type": "integer", "description": "Referrals given count" },
+        "referralsGivenGoal": { "type": "integer", "description": "Referrals goal" },
+        "referralsReceived": { "type": "integer", "description": "Referrals received count" },
+        "meetings121Count": { "type": "integer", "description": "1-2-1 meetings completed" },
+        "meetings121Goal": { "type": "integer", "description": "1-2-1 goal target" },
+        "tyfcbRevenue": { "type": "number", "description": "Achieved TYFCB revenue in VNĐ" },
+        "tyfcbGoal": { "type": "number", "description": "TYFCB revenue goal in VNĐ" },
+        "isReferralsMet": { "type": "boolean", "description": "Whether referrals target is reached" },
+        "isMeetingsMet": { "type": "boolean", "description": "Whether 1-2-1 target is reached" },
+        "isTyfcbMet": { "type": "boolean", "description": "Whether revenue target is reached" },
+        "warningMessage": { "type": "string", "description": "Discipline warning or praise notice" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Report generation timestamp" }
+      },
+      "required": ["id", "memberId", "memberName", "period", "referralsGiven", "meetings121Count", "tyfcbRevenue"]
+    },
+    "Meeting121": {
+      "title": "Meeting121",
+      "description": "1-2-1 meeting records and culture minutes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Meeting record ID" },
+        "hostMemberId": { "type": "string", "description": "Initiating member ID" },
+        "guestMemberId": { "type": "string", "description": "Partner member ID" },
+        "scheduledTime": { "type": "string", "format": "date-time", "description": "Scheduled meeting timestamp" },
+        "location": { "type": "string", "description": "Meeting venue or online link" },
+        "isCompleted": { "type": "boolean", "description": "Completion flag" },
+        "coreProducts": { "type": "string", "description": "Member core products discussed" },
+        "idealClientProfile": { "type": "string", "description": "Ideal client persona" },
+        "mutualCommitments": { "type": "string", "description": "Action commitments made" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["id", "hostMemberId", "guestMemberId", "location", "isCompleted"]
+    }
+  },
+  "firestore": {
+    "/members/{memberId}": {
+      "schema": "Member",
+      "description": "Chapter members roster"
+    },
+    "/referrals/{referralId}": {
+      "schema": "Referral",
+      "description": "Chapter business referrals"
+    },
+    "/chapter_goals/{goalId}": {
+      "schema": "ChapterGoal",
+      "description": "Chapter level KPI goals and real-time tracking"
+    },
+    "/kpi_reports/{reportId}": {
+      "schema": "KpiReport",
+      "description": "Periodic member KPI performance reports"
+    },
+    "/meetings121/{meetingId}": {
+      "schema": "Meeting121",
+      "description": "1-2-1 meeting records"
+    }
+  }
+}
